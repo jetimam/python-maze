@@ -3,6 +3,6 @@ from enum import IntFlag
 class Cell(IntFlag):
 		UPWALL = 1
 		RIGHTWALL = 2
-		DOWNWALL = 3
-		LEFTWALL = 4
-		VISITED = 5
+		DOWNWALL = 4
+		LEFTWALL = 8
+		VISITED = 16
