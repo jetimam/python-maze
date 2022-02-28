@@ -1,4 +1,3 @@
-from time import sleep
 from Cell import Cell
 from random import randint
 import numpy
@@ -10,11 +9,8 @@ class Maze:
 		self.maze = []
 	
 	def initialize(self):
-		initial = Cell.UPWALL | Cell.RIGHTWALL | Cell.DOWNWALL | Cell.LEFTWALL
-		for i in range(self.height-1): # y
-			self.maze.append([])
-			for j in range(self.width-1): # x
-				self.maze[i].append(initial)
+		initial = Cell.UPWALL | Cell.RIGHTWALL | Cell.DOWNWALL | Cell.LEFTWALL # 0 1111
+		self.maze = [[initial for _ in range(self.height)] for _ in range(self.height)]
 
 		return self.DFS()
 
@@ -26,7 +22,6 @@ class Maze:
 		while(len(stack) > 0):
 			current_cell = stack.pop()
 			self.maze[current_cell[0]][current_cell[1]] |= Cell.VISITED
-			sleep(1)
 			children = self.generate_random_child(current_cell)
 			if len(children) > 0:
 				stack.append(current_cell) # so that the other children can be explored when we eventually backtrack
@@ -41,7 +36,6 @@ class Maze:
 		children = []
 		x = parent_cell[0]
 		y = parent_cell[1]
-		print('current cell:', x, y)
 
 		if x > 0: #left border
 			if self.maze[x-1][y] & Cell.VISITED == 0:
@@ -65,7 +59,7 @@ class Maze:
 		child_y = random_child[1]
 
 		if unit_v[0] == 1: # right
-			self.maze[parent_x][parent_y] &= ~Cell.RIGHTWALL
+			self.maze[parent_x][parent_y] &= ~Cell.RIGHTWALL # 1111 & 1101 = 1101
 			self.maze[child_x][child_y] &= ~Cell.LEFTWALL
 		if unit_v[0] == -1: #left
 			self.maze[parent_x][parent_y] &= ~Cell.LEFTWALL
@@ -76,3 +70,6 @@ class Maze:
 		if unit_v[1] == -1: #down
 			self.maze[parent_x][parent_y] &= ~Cell.DOWNWALL
 			self.maze[child_x][child_y] &= ~Cell.UPWALL
+
+	def get_value(self, i, j):
+		return self.maze[i][j]
