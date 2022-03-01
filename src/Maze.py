@@ -53,7 +53,6 @@ class Maze:
 		return children
 
 	def generate_children_BFS(self, parent_cell, visited):
-		print('generating children')
 		children = []
 		x = parent_cell[0]
 		y = parent_cell[1]
