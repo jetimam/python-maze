@@ -17,46 +17,27 @@ class Agent:
 		backtracking_table = {}
 		queue.put(self.position)
 		visited.append(self.position)
-		while len(queue) > 0:
+		while not queue.empty():
 			current_cell = queue.get()
 			visited.append(current_cell)
 
 			if current_cell == goal_position:
 				break
 			else:
-				children = self.generate_children(current_cell)
+				children = self.maze.generate_children_BFS(current_cell, visited)
 
 				for child in children:
 					visited.append(child)
 					queue.put(child)
 					backtracking_table[child] = current_cell
 
-
-	def generate_children(self, parent_cell, visited):
-		children = []
-		x = parent_cell[0]
-		y = parent_cell[1]
-
-		if x > 0: #left border
-			if self.maze[x-1][y] not in visited:
-				children.append([x-1, y])
-		if y > 0: #up border
-			if self.maze[x][y-1] not in visited:
-				children.append([x, y-1])
-		if x < self.width-2: #right border
-			if self.maze[x+1][y] not in visited:
-				children.append([x+1, y])
-		if y < self.height-2: #down border
-			if self.maze[x][y+1] not in visited:
-				children.append([x, y+1])
-
-		return children
+		return self.back_track(current_cell, backtracking_table)
 
 	def back_track(self, current_cell, backtracking_table):
 		path = []
 
 		path.append(current_cell)
-		while current_cell != self.spawn_point:
+		while current_cell != self.position:
 			path.append(backtracking_table[current_cell])
 			current_cell = backtracking_table[current_cell]
 

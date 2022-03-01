@@ -22,7 +22,7 @@ class Maze:
 		while(len(stack) > 0):
 			current_cell = stack.pop()
 			self.maze[current_cell[0]][current_cell[1]] |= Cell.VISITED
-			children = self.generate_random_child(current_cell)
+			children = self.generate_children_DFS(current_cell)
 			if len(children) > 0:
 				stack.append(current_cell) # so that the other children can be explored when we eventually backtrack
 				random_child = children[randint(0, len(children)-1)]
@@ -32,7 +32,7 @@ class Maze:
 
 		return self.maze
 
-	def generate_random_child(self, parent_cell):
+	def generate_children_DFS(self, parent_cell):
 		children = []
 		x = parent_cell[0]
 		y = parent_cell[1]
@@ -49,6 +49,27 @@ class Maze:
 		if y < self.height-2: #down border
 			if self.maze[x][y+1] & Cell.VISITED == 0:
 				children.append([x, y+1])
+
+		return children
+
+	def generate_children_BFS(self, parent_cell, visited):
+		print('generating children')
+		children = []
+		x = parent_cell[0]
+		y = parent_cell[1]
+
+		if x > 0: #left border
+			if (x-1,y) not in visited:
+				children.append((x-1, y))
+		if y > 0: #up border
+			if (x,y-1) not in visited:
+				children.append((x, y-1))
+		if x < self.width-2: #right border
+			if (x+1,y) not in visited:
+				children.append((x+1, y))
+		if y < self.height-2: #down border
+			if (x,y+1) not in visited:
+				children.append((x, y+1))
 
 		return children
 
