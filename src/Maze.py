@@ -58,16 +58,16 @@ class Maze:
 		y = parent_cell[1]
 
 		if x > 0: #left border
-			if (x-1,y) not in visited:
+			if (x-1,y) not in visited and self.maze[x-1][y] & Cell.LEFTWALL == 0:
 				children.append((x-1, y))
 		if y > 0: #up border
-			if (x,y-1) not in visited:
+			if (x,y-1) not in visited and self.maze[x][y-1] & Cell.UPWALL == 0:
 				children.append((x, y-1))
 		if x < self.width-2: #right border
-			if (x+1,y) not in visited:
+			if (x+1,y) not in visited and self.maze[x+1][y] & Cell.RIGHTWALL == 0:
 				children.append((x+1, y))
 		if y < self.height-2: #down border
-			if (x,y+1) not in visited:
+			if (x,y+1) not in visited and self.maze[x][y+1] & Cell.DOWNWALL == 0:
 				children.append((x, y+1))
 
 		return children
