@@ -19,7 +19,7 @@ class Maze:
 		x = 0
 		y = 0
 		stack.append([x, y])
-		while(len(stack) > 0):
+		while len(stack) > 0:
 			current_cell = stack.pop()
 			self.maze[current_cell[0]][current_cell[1]] |= Cell.VISITED
 			children = self.generate_children_maze_build(current_cell)
@@ -43,10 +43,10 @@ class Maze:
 		if y > 0: #up border
 			if self.maze[x][y-1] & Cell.VISITED == 0:
 				children.append([x, y-1])
-		if x < self.width-2: #right border
+		if x <= self.width-2: #right border
 			if self.maze[x+1][y] & Cell.VISITED == 0:
 				children.append([x+1, y])
-		if y < self.height-2: #down border
+		if y <= self.height-2: #down border
 			if self.maze[x][y+1] & Cell.VISITED == 0:
 				children.append([x, y+1])
 
