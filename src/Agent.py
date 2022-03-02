@@ -24,7 +24,7 @@ class Agent:
 			if current_cell == goal_position:
 				break
 			else:
-				children = self.maze.generate_children_BFS(current_cell, visited)
+				children = self.maze.generate_children_agent_traversal(current_cell, visited)
 
 				for child in children:
 					visited.append(child)
