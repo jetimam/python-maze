@@ -1,6 +1,7 @@
 from Agent import Agent
 from Maze import Maze
 from Cell import Cell
+from Position import Position
 import pygame
 import sys
 
@@ -9,7 +10,7 @@ M_HEIGHT = 20
 maze = Maze(M_HEIGHT, M_HEIGHT)
 maze.initialize()
 
-agent = Agent((0,0), maze)
+agent = Agent(0, 0, maze)
 path = agent.BFS((15,15))
 print(path)
 # setup window
