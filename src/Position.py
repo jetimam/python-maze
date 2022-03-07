@@ -6,5 +6,11 @@ class Position:
 	def __repr__(self) -> str:
 		return '(' + str(self.x) + ', ' + str(self.y) + '):'
 
-	def subtract(self, second_point):
-		return Position(second_point.x - self.x, second_point.y - self.y)
+	def __hash__(self) -> int:
+		return hash((self.x, self.y))
+
+	def __eq__(self, __o: object) -> bool:
+		return __o and self.x == __o.x and self.y == __o.y
+
+	def subtract(self, parent):
+		return Position(self.x - parent.x, self.y - parent.y)
