@@ -78,12 +78,12 @@ class Maze:
 		elif unit_v.x == -1: #left
 			self.maze[current_cell_position.x][current_cell_position.y] &= ~Cell.LEFTWALL
 			self.maze[random_child_position.x][random_child_position.y] &= ~Cell.RIGHTWALL
-		elif unit_v.y == 1: #up
-			self.maze[current_cell_position.x][current_cell_position.y] &= ~Cell.UPWALL
-			self.maze[random_child_position.x][random_child_position.y] &= ~Cell.DOWNWALL
-		elif unit_v.y == -1: #down
+		elif unit_v.y == 1: #down
 			self.maze[current_cell_position.x][current_cell_position.y] &= ~Cell.DOWNWALL
 			self.maze[random_child_position.x][random_child_position.y] &= ~Cell.UPWALL
+		elif unit_v.y == -1: #up
+			self.maze[current_cell_position.x][current_cell_position.y] &= ~Cell.UPWALL
+			self.maze[random_child_position.x][random_child_position.y] &= ~Cell.DOWNWALL
 
 	def get_value(self, i, j):
 		return self.maze[i][j]
