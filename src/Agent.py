@@ -15,23 +15,21 @@ class Agent:
 	def BFS(self, goal_position):
 		queue = Queue(0)
 		visited = []
+		path = []
 		backtracking_table = {}
 		queue.put(self.position)
 		visited.append(self.position)
 		while not queue.empty():
 			current_cell = queue.get()
-			visited.append(current_cell)
-
 			if current_cell == goal_position:
 				break
 			else:
 				children = self.maze.generate_children_agent_traversal(current_cell, visited)
-
 				for child in children:
 					visited.append(child)
 					queue.put(child)
 					backtracking_table[child] = current_cell
-
+					
 		return self.back_track(current_cell, backtracking_table)
 
 	def back_track(self, current_cell, backtracking_table):
