@@ -7,7 +7,7 @@ import sys
 
 # maze config
 M_HEIGHT = 20
-maze = Maze(M_HEIGHT, M_HEIGHT)
+maze = Maze(M_HEIGHT)
 maze.initialize()
 
 agent = Agent(0, 0, maze)
