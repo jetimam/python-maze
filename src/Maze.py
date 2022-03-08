@@ -16,6 +16,7 @@ class Maze:
 		stack = []
 		initial_position = Position(0, 0)
 		stack.append(initial_position)
+		unit_v = Position(0, 0)
 		while len(stack) > 0:
 			current_cell_position = stack.pop()
 			self.maze[current_cell_position.x][current_cell_position.y] |= Cell.VISITED
@@ -26,7 +27,6 @@ class Maze:
 				random_child_position = children[randint(0, len(children)-1)]
 				unit_v = random_child_position.subtract(current_cell_position) # indicates the direction from current->child
 				self.remove_common_wall(current_cell_position, random_child_position, unit_v)
-				# print(current_cell_position, self.maze[current_cell_position.x][current_cell_position.y])
 				stack.append(random_child_position)
 
 		return self.maze
@@ -66,6 +66,18 @@ class Maze:
 			self.maze[current_cell_position.x][current_cell_position.y] &= ~Cell.UPWALL
 			self.maze[random_child_position.x][random_child_position.y] &= ~Cell.DOWNWALL
 
+	def create_loop(self, current_cell_position, unit_v):
+		counter += 1
+		if counter == 3:
+			if unit_v.x == 1: # right
+				self.maze[current_cell_position.x][current_cell_position.y] &= ~Cell.RIGHTWALL # 1111 & 1101 = 1101
+			elif unit_v.x == -1: #left
+				self.maze[current_cell_position.x][current_cell_position.y] &= ~Cell.LEFTWALL
+			elif unit_v.y == 1: #down
+				self.maze[current_cell_position.x][current_cell_position.y] &= ~Cell.DOWNWALL
+			elif unit_v.y == -1: #up
+				self.maze[current_cell_position.x][current_cell_position.y] &= ~Cell.UPWALL
+
 	def generate_children_agent_traversal(self, current_cell_position, visited):
 		children = []
 		x = current_cell_position.x
@@ -77,10 +89,10 @@ class Maze:
 		if y > 0: #up border
 			if Position(x,y-1) not in visited and self.maze[x][y-1] & Cell.DOWNWALL == 0:
 				children.append(Position(x, y-1))
-		if x < self.height-2: #right border
+		if x <= self.height-2: #right border
 			if Position(x+1,y) not in visited and self.maze[x+1][y] & Cell.LEFTWALL == 0:
 				children.append(Position(x+1, y))
-		if y < self.height-2: #down border
+		if y <= self.height-2: #down border
 			if Position(x,y+1) not in visited and self.maze[x][y+1] & Cell.UPWALL == 0:
 				children.append(Position(x, y+1))
 

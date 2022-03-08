@@ -11,7 +11,7 @@ maze = Maze(M_HEIGHT)
 maze.initialize()
 
 agent = Agent(0, 0, maze)
-path = agent.BFS(Position(20,20))
+path = agent.BFS(Position(19, 19))
 print(path)
 # setup window
 FPS = 30
