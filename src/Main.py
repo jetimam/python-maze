@@ -42,14 +42,12 @@ def render_maze():
 			cell = maze.get_value(i, j)
 			if cell & Cell.UPWALL == 1:
 				pygame.draw.line(screen, BLACK, [x, y], [x + CELL_SIZE, y])
+			if cell & Cell.RIGHTWALL == 2:
+				pygame.draw.line(screen, BLACK, [x + CELL_SIZE, y], [x + CELL_SIZE, y + CELL_SIZE])
+			if cell & Cell.DOWNWALL ==  4:
+				pygame.draw.line(screen, BLACK, [x, y + CELL_SIZE], [x + CELL_SIZE, y + CELL_SIZE])
 			if cell & Cell.LEFTWALL == 8:
 				pygame.draw.line(screen, BLACK, [x, y], [x, y + CELL_SIZE])
-			if i == M_HEIGHT-1:
-				if cell & Cell.RIGHTWALL == 2:
-					pygame.draw.line(screen, BLACK, [x + CELL_SIZE, y], [x + CELL_SIZE, y + CELL_SIZE])
-			if j == M_HEIGHT-1:
-				if cell & Cell.DOWNWALL ==  4:
-					pygame.draw.line(screen, BLACK, [x, y], [x, y + CELL_SIZE])
 			y += CELL_SIZE
 		y = 0
 		x += CELL_SIZE
