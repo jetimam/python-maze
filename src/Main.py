@@ -6,17 +6,21 @@ import pygame
 import sys
 
 # maze config
-M_HEIGHT = 20
+M_HEIGHT = 5
 maze = Maze(M_HEIGHT)
 maze.initialize()
 
-agent = Agent(0, 0, maze)
-path = agent.BFS(Position(19, 19))
-print(path)
 # setup window
 FPS = 30
-S_HEIGHT = 600
+S_HEIGHT = 800
 CELL_SIZE = S_HEIGHT // M_HEIGHT
+
+# agent config
+agent = Agent(Position(0, 0), maze)
+A_SIZE = CELL_SIZE // 4
+
+# manual user config
+user_pos = Position((CELL_SIZE/2), (CELL_SIZE/2))
 
 # colors
 WHITE = (255, 255, 255)
@@ -33,7 +37,6 @@ screen.fill(WHITE)
 pygame.display.set_caption("Python Maze")
 clock = pygame.time.Clock()
 
-# render the maze
 def render_maze():
 	x = 0
 	y = 0
@@ -54,15 +57,53 @@ def render_maze():
 	
 	pygame.display.update()
 
+def render_user():
+	pygame.draw.circle(screen, BLUE, [user_pos.x, user_pos.y], A_SIZE)
+	pygame.display.update()
 
-def traverse_maze():
-	pass
+def move_up():
+	pygame.draw.circle(screen, WHITE, [user_pos.x, user_pos.y], A_SIZE)
+	user_pos.y = user_pos.y - CELL_SIZE
+	pygame.draw.circle(screen, BLUE, [user_pos.x, user_pos.y], A_SIZE)
+	pygame.display.update()
 
+def move_left():
+	pygame.draw.circle(screen, WHITE, [user_pos.x, user_pos.y], A_SIZE)
+	user_pos.x = user_pos.x - CELL_SIZE
+	pygame.draw.circle(screen, BLUE, [user_pos.x, user_pos.y], A_SIZE)
+	pygame.display.update()
+
+def move_down():
+	pygame.draw.circle(screen, WHITE, [user_pos.x, user_pos.y], A_SIZE)
+	user_pos.y = user_pos.y + CELL_SIZE
+	pygame.draw.circle(screen, BLUE, [user_pos.x, user_pos.y], A_SIZE)
+	pygame.display.update()
+
+def move_right():
+	pygame.draw.circle(screen, WHITE, [user_pos.x, user_pos.y], A_SIZE)
+	user_pos.x = user_pos.x + CELL_SIZE
+	pygame.draw.circle(screen, BLUE, [user_pos.x, user_pos.y], A_SIZE)
+	pygame.display.update()
+
+# game
 render_maze()
+render_user()
 
-# game loop
 while True:
 	clock.tick(FPS)
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
-			sys.exit(0)
+			pygame.quit()
+			sys.exit()
+		if event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_w:
+				move_up()
+		if event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_a:
+				move_left()
+		if event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_s:
+				move_down()
+		if event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_d:
+				move_right()
