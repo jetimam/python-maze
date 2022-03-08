@@ -1,11 +1,12 @@
 from queue import Queue
+from Position import Position
 
 class Agent:
-	def __init__(self, position, maze):
-		self.position = position
+	def __init__(self, x, y, maze):
+		self.position = Position(x, y)
 		self.maze = maze
 
-	def set_position(self, destination):
+	def set_position(self, destination): # for movement
 		self.position = destination
 
 	def goal_test(self, goal_position):
@@ -14,23 +15,21 @@ class Agent:
 	def BFS(self, goal_position):
 		queue = Queue(0)
 		visited = []
+		path = []
 		backtracking_table = {}
 		queue.put(self.position)
 		visited.append(self.position)
 		while not queue.empty():
 			current_cell = queue.get()
-			visited.append(current_cell)
-
 			if current_cell == goal_position:
 				break
 			else:
 				children = self.maze.generate_children_agent_traversal(current_cell, visited)
-
 				for child in children:
 					visited.append(child)
 					queue.put(child)
 					backtracking_table[child] = current_cell
-
+					
 		return self.back_track(current_cell, backtracking_table)
 
 	def back_track(self, current_cell, backtracking_table):
