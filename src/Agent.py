@@ -14,7 +14,6 @@ class Agent:
 	def BFS(self, goal_position):
 		queue = Queue(0)
 		visited = []
-		path = []
 		backtracking_table = {}
 		queue.put(self.position)
 		visited.append(self.position)
@@ -40,4 +39,5 @@ class Agent:
 			current_cell = backtracking_table[current_cell]
 
 		path.reverse()
+		print(path)
 		return path
