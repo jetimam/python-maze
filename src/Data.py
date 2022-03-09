@@ -6,8 +6,7 @@ import time
 
 user_pos = Position(0, 0)
 
-# CHANGE THE PATH
-with open('/Users/jetimam/Documents/BSP04/python-maze/BFS_data.csv', 'w') as csvfile:
+with open('/Users/jetimam/Documents/BSP04/python-maze/data/BFS_data.csv', 'w') as csvfile:
 	csvwriter = csv.writer(csvfile)
 	csvwriter.writerow(['Maze Size', 'Execution Time', 'Shortest Path Length'])
 	cap = 5
