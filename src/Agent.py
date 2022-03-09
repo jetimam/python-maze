@@ -1,9 +1,8 @@
 from queue import Queue
-from Position import Position
 
 class Agent:
-	def __init__(self, x, y, maze):
-		self.position = Position(x, y)
+	def __init__(self, position, maze):
+		self.position = position
 		self.maze = maze
 
 	def set_position(self, destination): # for movement
@@ -15,7 +14,6 @@ class Agent:
 	def BFS(self, goal_position):
 		queue = Queue(0)
 		visited = []
-		path = []
 		backtracking_table = {}
 		queue.put(self.position)
 		visited.append(self.position)

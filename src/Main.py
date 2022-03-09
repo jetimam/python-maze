@@ -10,13 +10,17 @@ M_HEIGHT = 20
 maze = Maze(M_HEIGHT)
 maze.initialize()
 
-agent = Agent(0, 0, maze)
-path = agent.BFS(Position(19, 19))
-print(path)
 # setup window
 FPS = 30
-S_HEIGHT = 600
+S_HEIGHT = 800
 CELL_SIZE = S_HEIGHT // M_HEIGHT
+
+# agent config
+agent = Agent(Position(M_HEIGHT-1, M_HEIGHT-1), maze)
+A_SIZE = CELL_SIZE // 4
+
+# manual user config
+user_pos = Position(0, 0)
 
 # colors
 WHITE = (255, 255, 255)
@@ -33,7 +37,9 @@ screen.fill(WHITE)
 pygame.display.set_caption("Python Maze")
 clock = pygame.time.Clock()
 
-# render the maze
+def translate_coordinates(maze_position):
+	return (maze_position+0.5) * (CELL_SIZE)
+
 def render_maze():
 	x = 0
 	y = 0
@@ -54,15 +60,86 @@ def render_maze():
 	
 	pygame.display.update()
 
+def render_agent():
+	pygame.draw.circle(screen, RED, [translate_coordinates(agent.position.x), translate_coordinates(agent.position.y)], A_SIZE)
+	pygame.display.update()
 
-def traverse_maze():
-	pass
+def render_user():
+	pygame.draw.circle(screen, BLUE, [translate_coordinates(user_pos.x), translate_coordinates(user_pos.y)], A_SIZE)
+	pygame.display.update()
 
+def can_move(direction):
+	if direction == 'up':
+		cell = maze.get_value(user_pos.x, user_pos.y)
+		return cell & Cell.UPWALL != 1
+	elif direction == 'right':
+		cell = maze.get_value(user_pos.x, user_pos.y)
+		return cell & Cell.RIGHTWALL != 2
+	elif direction == 'down':
+		cell = maze.get_value(user_pos.x, user_pos.y)
+		return cell & Cell.DOWNWALL != 4
+	elif direction == 'left':
+		cell = maze.get_value(user_pos.x, user_pos.y)
+		return cell & Cell.LEFTWALL != 8
+
+def move_up():
+	pygame.draw.circle(screen, WHITE, [translate_coordinates(user_pos.x), translate_coordinates(user_pos.y)], A_SIZE)
+	user_pos.y = user_pos.y - 1
+	pygame.draw.circle(screen, BLUE, [translate_coordinates(user_pos.x), translate_coordinates(user_pos.y)], A_SIZE)
+	pygame.display.update()
+
+def move_left():
+	pygame.draw.circle(screen, WHITE, [translate_coordinates(user_pos.x), translate_coordinates(user_pos.y)], A_SIZE)
+	user_pos.x = user_pos.x - 1
+	pygame.draw.circle(screen, BLUE, [translate_coordinates(user_pos.x), translate_coordinates(user_pos.y)], A_SIZE)
+	pygame.display.update()
+
+def move_down():
+	pygame.draw.circle(screen, WHITE, [translate_coordinates(user_pos.x), translate_coordinates(user_pos.y)], A_SIZE)
+	user_pos.y = user_pos.y + 1
+	pygame.draw.circle(screen, BLUE, [translate_coordinates(user_pos.x), translate_coordinates(user_pos.y)], A_SIZE)
+	pygame.display.update()
+
+def move_right():
+	pygame.draw.circle(screen, WHITE, [translate_coordinates(user_pos.x), translate_coordinates(user_pos.y)], A_SIZE)
+	user_pos.x = user_pos.x + 1
+	pygame.draw.circle(screen, BLUE, [translate_coordinates(user_pos.x), translate_coordinates(user_pos.y)], A_SIZE)
+	pygame.display.update()
+
+def ai_traversal():
+	path = agent.BFS(user_pos)
+	pygame.draw.circle(screen, WHITE, [translate_coordinates(agent.position.x), translate_coordinates(agent.position.y)], A_SIZE)
+	agent.position = path[1]
+	pygame.draw.circle(screen, RED, [translate_coordinates(agent.position.x), translate_coordinates(agent.position.y)], A_SIZE)
+	pygame.display.update()
+
+# game
 render_maze()
+render_agent()
+render_user()
 
-# game loop
 while True:
 	clock.tick(FPS)
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
-			sys.exit(0)
+			pygame.quit()
+			sys.exit()
+		if user_pos == agent.position:
+			pygame.quit()
+			print('GG')
+			sys.exit()
+		if event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_ESCAPE:
+				pygame.quit()
+				sys.exit()
+			if event.key == pygame.K_w and can_move('up'):
+				move_up()
+			elif event.key == pygame.K_a and can_move('left'):
+				move_left()
+			elif event.key == pygame.K_s and can_move('down'):
+				move_down()
+			elif event.key == pygame.K_d and can_move('right'):
+				move_right()
+			else:
+				continue
+			ai_traversal()

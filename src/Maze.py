@@ -14,6 +14,7 @@ class Maze:
 
 	def DFS(self):
 		stack = []
+		counter = 0
 		initial_position = Position(0, 0)
 		stack.append(initial_position)
 		unit_v = Position(0, 0)
@@ -28,6 +29,11 @@ class Maze:
 				unit_v = random_child_position.subtract(current_cell_position) # indicates the direction from current->child
 				self.remove_common_wall(current_cell_position, random_child_position, unit_v)
 				stack.append(random_child_position)
+			else:
+				counter += 1
+				if counter == 3:
+					self.remove_deadend(unit_v, current_cell_position)
+					counter = 0
 
 		return self.maze
 
@@ -51,7 +57,6 @@ class Maze:
 
 		return children
 
-
 	def remove_common_wall(self, current_cell_position, random_child_position, unit_v):
 		if unit_v.x == 1: # right
 			self.maze[current_cell_position.x][current_cell_position.y] &= ~Cell.RIGHTWALL # 1111 & 1101 = 1101
@@ -66,17 +71,23 @@ class Maze:
 			self.maze[current_cell_position.x][current_cell_position.y] &= ~Cell.UPWALL
 			self.maze[random_child_position.x][random_child_position.y] &= ~Cell.DOWNWALL
 
-	def create_loop(self, current_cell_position, unit_v):
-		counter += 1
-		if counter == 3:
-			if unit_v.x == 1: # right
+	def remove_deadend(self, unit_v, current_cell_position):
+		if unit_v.x == 1: # right
+			if current_cell_position.x < self.height-2:
 				self.maze[current_cell_position.x][current_cell_position.y] &= ~Cell.RIGHTWALL # 1111 & 1101 = 1101
-			elif unit_v.x == -1: #left
+				self.maze[current_cell_position.x + 1][current_cell_position.y] &= ~Cell.LEFTWALL
+		elif unit_v.x == -1: # left
+			if current_cell_position.x > 0:
 				self.maze[current_cell_position.x][current_cell_position.y] &= ~Cell.LEFTWALL
-			elif unit_v.y == 1: #down
+				self.maze[current_cell_position.x - 1][current_cell_position.y] &= ~Cell.RIGHTWALL
+		elif unit_v.y == 1: # down
+			if current_cell_position.y < self.height-2:
 				self.maze[current_cell_position.x][current_cell_position.y] &= ~Cell.DOWNWALL
-			elif unit_v.y == -1: #up
+				self.maze[current_cell_position.x][current_cell_position.y + 1] &= ~Cell.UPWALL
+		elif unit_v.y == -1: # up
+			if current_cell_position.y > 0:
 				self.maze[current_cell_position.x][current_cell_position.y] &= ~Cell.UPWALL
+				self.maze[current_cell_position.x][current_cell_position.y - 1] &= ~Cell.DOWNWALL
 
 	def generate_children_agent_traversal(self, current_cell_position, visited):
 		children = []
