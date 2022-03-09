@@ -39,5 +39,4 @@ class Agent:
 			current_cell = backtracking_table[current_cell]
 
 		path.reverse()
-		print(path)
 		return path
