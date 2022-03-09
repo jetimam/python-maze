@@ -6,7 +6,7 @@ import pygame
 import sys
 
 # maze config
-M_HEIGHT = 5
+M_HEIGHT = 20
 maze = Maze(M_HEIGHT)
 maze.initialize()
 
@@ -16,11 +16,11 @@ S_HEIGHT = 800
 CELL_SIZE = S_HEIGHT // M_HEIGHT
 
 # agent config
-agent = Agent(Position(0, 0), maze)
+agent = Agent(Position(M_HEIGHT-1, M_HEIGHT-1), maze)
 A_SIZE = CELL_SIZE // 4
 
 # manual user config
-user_pos = Position((CELL_SIZE/2), (CELL_SIZE/2))
+user_pos = Position(0, 0)
 
 # colors
 WHITE = (255, 255, 255)
@@ -36,6 +36,9 @@ screen = pygame.display.set_mode((S_HEIGHT, S_HEIGHT))
 screen.fill(WHITE)
 pygame.display.set_caption("Python Maze")
 clock = pygame.time.Clock()
+
+def translate_coordinates(maze_position):
+	return (maze_position+0.5) * (CELL_SIZE)
 
 def render_maze():
 	x = 0
@@ -57,36 +60,53 @@ def render_maze():
 	
 	pygame.display.update()
 
+def render_agent():
+	pygame.draw.circle(screen, RED, [translate_coordinates(agent.position.x), translate_coordinates(agent.position.y)], A_SIZE)
+	pygame.display.update()
+
 def render_user():
-	pygame.draw.circle(screen, BLUE, [user_pos.x, user_pos.y], A_SIZE)
+	pygame.draw.circle(screen, BLUE, [translate_coordinates(user_pos.x), translate_coordinates(user_pos.y)], A_SIZE)
 	pygame.display.update()
 
 def move_up():
-	pygame.draw.circle(screen, WHITE, [user_pos.x, user_pos.y], A_SIZE)
-	user_pos.y = user_pos.y - CELL_SIZE
-	pygame.draw.circle(screen, BLUE, [user_pos.x, user_pos.y], A_SIZE)
+	print('moving up')
+	pygame.draw.circle(screen, WHITE, [translate_coordinates(user_pos.x), translate_coordinates(user_pos.y)], A_SIZE)
+	user_pos.y = user_pos.y - 1
+	pygame.draw.circle(screen, BLUE, [translate_coordinates(user_pos.x), translate_coordinates(user_pos.y)], A_SIZE)
 	pygame.display.update()
 
 def move_left():
-	pygame.draw.circle(screen, WHITE, [user_pos.x, user_pos.y], A_SIZE)
-	user_pos.x = user_pos.x - CELL_SIZE
-	pygame.draw.circle(screen, BLUE, [user_pos.x, user_pos.y], A_SIZE)
+	print('moving left')
+	pygame.draw.circle(screen, WHITE, [translate_coordinates(user_pos.x), translate_coordinates(user_pos.y)], A_SIZE)
+	user_pos.x = user_pos.x - 1
+	pygame.draw.circle(screen, BLUE, [translate_coordinates(user_pos.x), translate_coordinates(user_pos.y)], A_SIZE)
 	pygame.display.update()
 
 def move_down():
-	pygame.draw.circle(screen, WHITE, [user_pos.x, user_pos.y], A_SIZE)
-	user_pos.y = user_pos.y + CELL_SIZE
-	pygame.draw.circle(screen, BLUE, [user_pos.x, user_pos.y], A_SIZE)
+	print('moving down')
+	pygame.draw.circle(screen, WHITE, [translate_coordinates(user_pos.x), translate_coordinates(user_pos.y)], A_SIZE)
+	user_pos.y = user_pos.y + 1
+	pygame.draw.circle(screen, BLUE, [translate_coordinates(user_pos.x), translate_coordinates(user_pos.y)], A_SIZE)
 	pygame.display.update()
 
 def move_right():
-	pygame.draw.circle(screen, WHITE, [user_pos.x, user_pos.y], A_SIZE)
-	user_pos.x = user_pos.x + CELL_SIZE
-	pygame.draw.circle(screen, BLUE, [user_pos.x, user_pos.y], A_SIZE)
+	print('moving right')
+	pygame.draw.circle(screen, WHITE, [translate_coordinates(user_pos.x), translate_coordinates(user_pos.y)], A_SIZE)
+	user_pos.x = user_pos.x + 1
+	pygame.draw.circle(screen, BLUE, [translate_coordinates(user_pos.x), translate_coordinates(user_pos.y)], A_SIZE)
+	pygame.display.update()
+
+def ai_traversal():
+	print('agent moving')
+	path = agent.BFS(user_pos)
+	pygame.draw.circle(screen, WHITE, [translate_coordinates(agent.position.x), translate_coordinates(agent.position.y)], A_SIZE)
+	agent.position = path[1]
+	pygame.draw.circle(screen, RED, [translate_coordinates(agent.position.x), translate_coordinates(agent.position.y)], A_SIZE)
 	pygame.display.update()
 
 # game
 render_maze()
+render_agent()
 render_user()
 
 while True:
@@ -95,15 +115,20 @@ while True:
 		if event.type == pygame.QUIT:
 			pygame.quit()
 			sys.exit()
+		if user_pos == agent.position:
+			pygame.quit()
+			print('GG')
+			sys.exit()
 		if event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_ESCAPE:
+				pygame.quit()
+				sys.exit()
 			if event.key == pygame.K_w:
 				move_up()
-		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_a:
 				move_left()
-		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_s:
 				move_down()
-		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_d:
 				move_right()
+			ai_traversal()
