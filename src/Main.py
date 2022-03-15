@@ -4,6 +4,7 @@ from Cell import Cell
 from Position import Position
 import pygame
 import sys
+import math
 
 # maze config
 M_HEIGHT = 20
@@ -107,7 +108,8 @@ def move_right():
 	pygame.display.update()
 
 def ai_traversal():
-	path = agent.search_BFS(user_pos)
+	euclidean = lambda x,y,x_t,y_t: math.sqrt((x_t - x)**2 + (y_t - y)**2)
+	path = agent.search_AS(user_pos, euclidean)
 	pygame.draw.circle(screen, WHITE, [translate_coordinates(agent.position.x), translate_coordinates(agent.position.y)], A_SIZE)
 	agent.position = path[1]
 	pygame.draw.circle(screen, RED, [translate_coordinates(agent.position.x), translate_coordinates(agent.position.y)], A_SIZE)
