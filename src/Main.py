@@ -107,7 +107,7 @@ def move_right():
 	pygame.display.update()
 
 def ai_traversal():
-	path = agent.BFS(user_pos)
+	path = agent.search_BFS(user_pos)
 	pygame.draw.circle(screen, WHITE, [translate_coordinates(agent.position.x), translate_coordinates(agent.position.y)], A_SIZE)
 	agent.position = path[1]
 	pygame.draw.circle(screen, RED, [translate_coordinates(agent.position.x), translate_coordinates(agent.position.y)], A_SIZE)
