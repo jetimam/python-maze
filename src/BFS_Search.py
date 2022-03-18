@@ -3,10 +3,10 @@ from queue import Queue
 class BFS:
 	def search(maze, start_position, goal_position):
 		queue = Queue(0)
-		visited = []
 		backtracking_table = {}
+		visited = {}
+		visited[start_position] = True
 		queue.put(start_position)
-		visited.append(start_position)
 		while not queue.empty():
 			current_cell = queue.get()
 			if current_cell == goal_position:
@@ -14,7 +14,7 @@ class BFS:
 			else:
 				children = maze.generate_children_agent_traversal(current_cell, visited)
 				for child in children:
-					visited.append(child)
+					visited[child] = True
 					queue.put(child)
 					backtracking_table[child] = current_cell
 					

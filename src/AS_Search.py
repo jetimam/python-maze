@@ -3,11 +3,11 @@ from queue import PriorityQueue
 class AS:
 	def search(maze, start_position, goal_position, heuristic):
 		priority_queue = PriorityQueue()
-		visited = []
 		backtracking_table = {}
+		visited = {}
+		visited[start_position] = True
 		f_score = heuristic(start_position.x, start_position.y, goal_position.x, goal_position.y)
 		priority_queue.put((f_score, (0, start_position)))
-		visited.append(start_position)
 		while priority_queue.not_empty:
 			current_cell = priority_queue.get()
 			if current_cell[1][1] == goal_position:
@@ -18,7 +18,7 @@ class AS:
 					g_score = current_cell[1][0] + 1
 					h_score = heuristic(child_position.x, child_position.y, goal_position.x, goal_position.y)
 					f_score = g_score + h_score
-					visited.append(child_position)
+					visited[child_position] = True
 					backtracking_table[child_position] = current_cell[1][1]
 					priority_queue.put((f_score, (g_score, child_position)))
 
