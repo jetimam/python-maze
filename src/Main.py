@@ -109,7 +109,8 @@ def move_right():
 
 def ai_traversal():
 	euclidean = lambda x,y,x_t,y_t: math.sqrt((x_t - x)**2 + (y_t - y)**2)
-	path = agent.search_AS(user_pos, euclidean)
+	manhattan = lambda x, y, x_t, y_t: abs(x - x_t) + abs(y - y_t)
+	path = agent.search_AS(user_pos, manhattan)
 	pygame.draw.circle(screen, WHITE, [translate_coordinates(agent.position.x), translate_coordinates(agent.position.y)], A_SIZE)
 	agent.position = path[1]
 	pygame.draw.circle(screen, RED, [translate_coordinates(agent.position.x), translate_coordinates(agent.position.y)], A_SIZE)
