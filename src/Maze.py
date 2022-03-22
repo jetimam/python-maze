@@ -95,7 +95,7 @@ class Maze:
 		y = current_cell_position.y
 
 		if x > 0: #left border
-			if Position(x-1,y) not in visited and self.maze[x-1][y] & Cell.RIGHTWALL == 0:
+			if Position(x-1,y) not in visited and self.maze[x-1][y] & Cell.RIGHTWALL == 0: # this "key in dict" operation's time complexity is O(1)
 				children.append(Position(x-1, y))
 		if y > 0: #up border
 			if Position(x,y-1) not in visited and self.maze[x][y-1] & Cell.DOWNWALL == 0:
