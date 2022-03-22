@@ -8,8 +8,10 @@ class AS:
 		visited[start_position] = True
 		f_score = heuristic(start_position.x, start_position.y, goal_position.x, goal_position.y)
 		priority_queue.put((f_score, (0, start_position)))
+		# n = 0
 		while priority_queue.not_empty:
 			current_cell = priority_queue.get()
+			# n += 1
 			if current_cell[1][1] == goal_position:
 				break
 			else:
@@ -21,8 +23,8 @@ class AS:
 					visited[child_position] = True
 					backtracking_table[child_position] = current_cell[1][1]
 					priority_queue.put((f_score, (g_score, child_position)))
-
-		return AS.back_track(current_cell[1][1], backtracking_table, start_position)
+		path = AS.back_track(current_cell[1][1], backtracking_table, start_position)
+		return path
 
 	def back_track(current_cell, backtracking_table, start_position):
 		path = []

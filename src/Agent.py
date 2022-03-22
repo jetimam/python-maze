@@ -15,5 +15,11 @@ class Agent:
 	def search_BFS(self, goal_position):
 		return BFS.search(self.maze, self.position, goal_position)
 
+	def search_BFS_debug(self, screen, goal_position, CELL_SIZE):
+		return BFS.search_debug(screen, self.maze, self.position, goal_position, CELL_SIZE)
+
 	def search_AS(self, goal_position, heuristic):
 		return AS.search(self.maze, self.position, goal_position, heuristic)
+	
+	def search_AS_debug(self, screen, goal_position, heuristic, CELL_SIZE):
+		return AS.search_debug(screen, self.maze, self.position, goal_position, heuristic, CELL_SIZE)

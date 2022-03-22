@@ -7,7 +7,7 @@ import sys
 import math
 
 # maze config
-M_HEIGHT = 20
+M_HEIGHT = 25
 maze = Maze(M_HEIGHT)
 maze.initialize()
 
@@ -60,6 +60,9 @@ def render_maze():
 		x += CELL_SIZE
 	
 	pygame.display.update()
+
+def debug_viz(path):
+	pass
 
 def render_agent():
 	pygame.draw.circle(screen, RED, [translate_coordinates(agent.position.x), translate_coordinates(agent.position.y)], A_SIZE)
@@ -116,33 +119,53 @@ def ai_traversal():
 	pygame.draw.circle(screen, RED, [translate_coordinates(agent.position.x), translate_coordinates(agent.position.y)], A_SIZE)
 	pygame.display.update()
 
-# game
-render_maze()
-render_agent()
-render_user()
-
-while True:
-	clock.tick(FPS)
-	for event in pygame.event.get():
-		if event.type == pygame.QUIT:
-			pygame.quit()
-			sys.exit()
-		if user_pos == agent.position:
-			pygame.quit()
-			print('GG')
-			sys.exit()
-		if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_ESCAPE:
+def debug(type):
+	render_maze()
+	if type == "bfs":
+		agent.search_BFS_debug(screen, user_pos, CELL_SIZE)
+	elif type == "as_euclidean":
+		euclidean = lambda x,y,x_t,y_t: math.sqrt((x_t - x)**2 + (y_t - y)**2)
+		agent.search_AS_debug(screen, user_pos, euclidean, CELL_SIZE)
+	elif type == "as_manhattan":
+		manhattan = lambda x, y, x_t, y_t: abs(x - x_t) + abs(y - y_t)
+		agent.search_AS_debug(screen, user_pos, manhattan, CELL_SIZE)
+	while True:
+		clock.tick(FPS)
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
 				pygame.quit()
 				sys.exit()
-			if event.key == pygame.K_w and can_move('up'):
-				move_up()
-			elif event.key == pygame.K_a and can_move('left'):
-				move_left()
-			elif event.key == pygame.K_s and can_move('down'):
-				move_down()
-			elif event.key == pygame.K_d and can_move('right'):
-				move_right()
-			else:
-				continue
-			ai_traversal()
+
+def game():
+	render_maze()
+	render_agent()
+	render_user()
+
+	while True:
+		clock.tick(FPS)
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				pygame.quit()
+				sys.exit()
+			if user_pos == agent.position:
+				pygame.quit()
+				print('GG')
+				sys.exit()
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_ESCAPE:
+					pygame.quit()
+					sys.exit()
+				if event.key == pygame.K_w and can_move('up'):
+					move_up()
+				elif event.key == pygame.K_a and can_move('left'):
+					move_left()
+				elif event.key == pygame.K_s and can_move('down'):
+					move_down()
+				elif event.key == pygame.K_d and can_move('right'):
+					move_right()
+				else:
+					continue
+				ai_traversal()
+
+# game()
+debug("bfs")
