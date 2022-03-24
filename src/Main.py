@@ -7,12 +7,12 @@ import sys
 import math
 
 # maze config
-M_HEIGHT = 20
+M_HEIGHT = 25
 maze = Maze(M_HEIGHT)
 maze.initialize()
 
 # setup window
-FPS = 30
+FPS = 5
 S_HEIGHT = 800
 CELL_SIZE = S_HEIGHT // M_HEIGHT
 
@@ -116,33 +116,34 @@ def ai_traversal():
 	pygame.draw.circle(screen, RED, [translate_coordinates(agent.position.x), translate_coordinates(agent.position.y)], A_SIZE)
 	pygame.display.update()
 
-# game
-render_maze()
-render_agent()
-render_user()
-
-while True:
-	clock.tick(FPS)
-	for event in pygame.event.get():
-		if event.type == pygame.QUIT:
-			pygame.quit()
-			sys.exit()
+def game():
+	render_maze()
+	render_agent()
+	render_user()
+	held_key = None
+	while True:
+		clock.tick(FPS)
 		if user_pos == agent.position:
 			pygame.quit()
 			print('GG')
 			sys.exit()
-		if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_ESCAPE:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
 				pygame.quit()
 				sys.exit()
-			if event.key == pygame.K_w and can_move('up'):
-				move_up()
-			elif event.key == pygame.K_a and can_move('left'):
-				move_left()
-			elif event.key == pygame.K_s and can_move('down'):
-				move_down()
-			elif event.key == pygame.K_d and can_move('right'):
-				move_right()
-			else:
-				continue
-			ai_traversal()
+			elif event.type == pygame.KEYDOWN:
+				held_key = event.key
+				if event.key == pygame.K_ESCAPE:
+					pygame.quit()
+					sys.exit()
+		if held_key == pygame.K_w and can_move('up'):
+			move_up()
+		elif held_key == pygame.K_a and can_move('left'):
+			move_left()
+		elif held_key == pygame.K_s and can_move('down'):
+			move_down()
+		elif held_key == pygame.K_d and can_move('right'):
+			move_right()
+		ai_traversal()
+
+game()
