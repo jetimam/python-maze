@@ -1,7 +1,8 @@
 import pygame
 
 M_HEIGHT = 25
-FPS = 30
+FPS_GAME = 5
+FPS_DEBUG = 30
 S_HEIGHT = 800
 CELL_SIZE = S_HEIGHT // M_HEIGHT
 

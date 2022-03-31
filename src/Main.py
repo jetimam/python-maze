@@ -46,9 +46,6 @@ def render_maze():
 	
 	pygame.display.update()
 
-def debug_viz(path):
-	pass
-
 def render_agent():
 	pygame.draw.circle(screen, Util.RED, [Util.translate_coordinates(agent.position.x), Util.translate_coordinates(agent.position.y)], A_SIZE)
 	pygame.display.update()
@@ -108,7 +105,7 @@ def ai_traversal():
 def debug(type):
 	render_maze()
 	while True:
-		clock.tick(Util.FPS)
+		clock.tick(Util.FPS_DEBUG)
 		if type == "bfs":
 			agent.search_BFS(user_pos, True, screen)
 			type = 'used'
@@ -124,37 +121,40 @@ def debug(type):
 			if event.type == pygame.QUIT:
 				pygame.quit()
 				sys.exit()
+			elif event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_ESCAPE:
+					pygame.quit()
+					sys.exit()
 
 def game():
 	render_maze()
 	render_agent()
 	render_user()
-
+	held_key = None
 	while True:
-		clock.tick(Util.FPS)
+		clock.tick(Util.FPS_GAME)
+		if user_pos == agent.position:
+			pygame.quit()
+			print('GG')
+			sys.exit()
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				pygame.quit()
 				sys.exit()
-			if user_pos == agent.position:
-				pygame.quit()
-				print('GG')
-				sys.exit()
-			if event.type == pygame.KEYDOWN:
+			elif event.type == pygame.KEYDOWN:
+				held_key = event.key
 				if event.key == pygame.K_ESCAPE:
 					pygame.quit()
 					sys.exit()
-				if event.key == pygame.K_w and can_move('up'):
-					move_up()
-				elif event.key == pygame.K_a and can_move('left'):
-					move_left()
-				elif event.key == pygame.K_s and can_move('down'):
-					move_down()
-				elif event.key == pygame.K_d and can_move('right'):
-					move_right()
-				else:
-					continue
-				ai_traversal()
+		if held_key == pygame.K_w and can_move('up'):
+			move_up()
+		elif held_key == pygame.K_a and can_move('left'):
+			move_left()
+		elif held_key == pygame.K_s and can_move('down'):
+			move_down()
+		elif held_key == pygame.K_d and can_move('right'):
+			move_right()
+		ai_traversal()
 
-game()
-# debug("bfs")
+# game()
+debug("bfs")
