@@ -156,5 +156,5 @@ def game():
 					continue
 				ai_traversal()
 
-# game()
-debug("bfs")
+game()
+# debug("bfs")
