@@ -1,10 +1,12 @@
 import pygame
 
+# maze settings
 M_HEIGHT = 25
 FPS_GAME = 5
 FPS_DEBUG = 30
 S_HEIGHT = 800
 CELL_SIZE = S_HEIGHT // M_HEIGHT
+heuristic_weight = 1
 
 # colors
 WHITE = (255, 255, 255)
@@ -24,4 +26,3 @@ def draw_rect_debug(screen, color, position):
 	pygame.draw.rect(screen, color, pygame.Rect(x, y, CELL_SIZE/2, CELL_SIZE/2))
 	pygame.display.update()
 	pygame.event.get()
-	# pygame.time.wait(50)

@@ -1,7 +1,7 @@
 from queue import PriorityQueue
 import Util
 
-def search(maze, start_position, goal_position, heuristic, debug, screen, heuristic_weight):
+def search(maze, start_position, goal_position, heuristic, debug, screen):
 	priority_queue = PriorityQueue()
 	backtracking_table = {}
 	visited = {}
@@ -20,7 +20,7 @@ def search(maze, start_position, goal_position, heuristic, debug, screen, heuris
 			children_position = maze.generate_children_agent_traversal(current_cell[1][1], visited)
 			for child_position in children_position:
 				g_score = current_cell[1][0] + 1
-				h_score = heuristic_weight * heuristic(child_position.x, child_position.y, goal_position.x, goal_position.y)
+				h_score = Util.heuristic_weight * heuristic(child_position.x, child_position.y, goal_position.x, goal_position.y)
 				f_score = g_score + h_score
 				visited[child_position] = True
 				backtracking_table[child_position] = current_cell[1][1]
