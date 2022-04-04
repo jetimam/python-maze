@@ -115,7 +115,7 @@ def debug(type):
 			type = 'used'
 		elif type == "as_manhattan":
 			manhattan = lambda x, y, x_t, y_t: abs(x - x_t) + abs(y - y_t)
-			agent.search_AS(user_pos, manhattan, True, screen)
+			agent.search_AS(user_pos, manhattan, True, screen, 2)
 			type = 'used'
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -157,4 +157,4 @@ def game():
 		ai_traversal()
 
 # game()
-debug("bfs")
+debug("as_manhattan") # bfs || as_euclidean || as_manhattan

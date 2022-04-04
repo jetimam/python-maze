@@ -14,8 +14,10 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 225)
 PURPLE = (255, 0, 255)
 
+# functions
 def translate_coordinates(position):
 	return (position+0.5) * (CELL_SIZE)
+
 def draw_rect_debug(screen, color, position):
 	x = translate_coordinates(position.x)
 	y = translate_coordinates(position.y)
