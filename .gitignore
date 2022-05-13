@@ -129,5 +129,5 @@ dmypy.json
 .pyre/
 
 # Custom
-data/
+data/in_progress
 .DS_STORE
